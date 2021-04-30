@@ -38,3 +38,203 @@ dataBinding{
   enabled = true
 }
 ```
+
+## 데이터바인딩 기본 ( Kotlin )
+- activity_main
+```
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="main"
+            type="com.example.livs2.MainActivity" />
+        <variable
+            name="user"
+            type="com.example.livs2.model.User" />
+
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+        <EditText
+            android:hint="이름"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/EditText_name"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:hint="나이"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EditText_name"
+            android:id="@+id/EditText_age"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:hint="주소"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EditText_age"
+            android:id="@+id/EditText_address"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btn_submit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/EditText_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{ () -> main.Btn_click()}"/>
+
+        <TextView
+            android:text="@{user._name}"
+            android:id="@+id/TextView_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:text="@{user._age}"
+            android:id="@+id/TextView_age"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/TextView_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:text="@{user._address}"
+            android:id="@+id/TextView_address"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/TextView_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
+```
+- User.kt
+```
+package com.example.livs2.model
+
+data class User(
+    val _name : String,
+    val _age : String,
+    val _address : String
+)
+```
+- MainActivity.kt
+```
+package com.example.livs2
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import com.example.livs2.databinding.ActivityMainBinding
+import com.example.livs2.model.User
+
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding : ActivityMainBinding
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
+        binding.main = this
+
+//        binding.btnSubmit.setOnClickListener {
+//            var name = binding.EditTextName.text.toString()
+//            var age = binding.EditTextAge.text.toString()
+//            var address = binding.EditTextAddress.text.toString()
+//            Toast.makeText(this,"클릭 $name , $age , $address",Toast.LENGTH_SHORT).show()
+//            binding.user = User(name, age, address)
+//        }
+    }
+    fun Btn_click(){
+        var name = binding.EditTextName.text.toString()
+        var age = binding.EditTextAge.text.toString()
+        var address = binding.EditTextAddress.text.toString()
+        Toast.makeText(this,"클릭 $name , $age , $address",Toast.LENGTH_SHORT).show()
+        binding.user = User(name, age, address)
+    }
+}
+```
+
+## 데이터바인딩 기본 ( Java )
+- User.java
+```
+package com.example.lives.model;
+
+public class User {
+    private String name;
+    private String age;
+    private String address;
+
+    public User(String name, String age, String address){
+        this.name = name;
+        this.age = age;
+        this.address = address;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+}
+
+```
+- MainActivity.java
+```
+package com.example.lives;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+
+import android.os.Bundle;
+import android.view.View;
+
+import com.example.lives.databinding.ActivityMainBinding;
+import com.example.lives.model.User;
+
+public class MainActivity extends AppCompatActivity{
+    private ActivityMainBinding binding;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding.setMain(this);
+
+        binding.btnSubmit.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                String name = binding.EditTextName.getText().toString();
+                String age = binding.EditTextAge.getText().toString();
+                String address = binding.EditTextAddress.getText().toString();
+
+                User user = new User(name,age,address);
+                binding.setUser(user);
+            }
+        });
+    }
+}
+```
