@@ -52,4 +52,30 @@ implementation "androidx.activity:activity-ktx:1.1.0"
 - Configuration 변경이 발생 시 Activity가 다시 시작되는 것을 확인 가능 -> but, ViewModel은 여전히 메모리 상에 남아있다.
   - Activity 내부에서 Configuration 변경과 무관하게 유지되는 NonConfigurationInstances 객체를 따로 관리
 - Activity의 finish() 호출등에 의해 Activity의 생명주기가 종료되면 내부 LifecycleEventObserver를 통해 ViewModel도 onCleared() 콜백 호출
+
+## ViewModel 요청 프로세스
 ![image](https://user-images.githubusercontent.com/81352078/116787446-00a25680-aadf-11eb-9d89-6f1d4cdcb9d9.png)
+- ViewModelProvider를 통해 ViewModel 인스턴스 요청
+- ViewModelProvider 내부에서는 ViewModelStoreOwner를 참조하여 ViewModelStore를 가져온다.
+- ViewModelStore에게 이미 생성된 ViewModel 인스턴스 요청
+- ViewModelStore가 적합한 ViewModel 인스턴스를 가지고 있지 않다면, Factory를 통해 ViewModel을 생성
+- 생성한 ViewModel 인스턴스를 ViewModelStore에 저장하고 만들어진 ViewModel 인스턴스를 클라이언트에 반환
+
+## ViewModel 구현
+- ViewModel을 상속받는 서브 클래스 정의
+```
+class MainViewModel : ViewModel(){}
+```
+- ViewModel 인스턴스 접근
+```
+class MainActivity : AppCompayActivity(){
+  private lateinit var viewModel : MainViewModel
+  override fun onCreate(savedInstanceState : Bundle?){
+    super.onCreate(savedInstanceState)
+    viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(MainViewModel::class.java)
+  }
+}
+```
+- ViewModel을 생성하기 위해선 ViewModelProvider 객체 필요
+- ViewModelProvider을 생성하기 위해 매개변수로 ViewModelStoreOwner, ViewModelProvider.Factory 필요
+- 
