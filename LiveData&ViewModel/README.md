@@ -45,4 +45,11 @@ implementation "androidx.activity:activity-ktx:1.1.0"
 - ViewModel은 View로부터 독립적이며, View가 필요한 데이터만을 소유
 - MVVM 패턴을 적용하면 Activity나 Fragment같은 UI 컨트롤러의 과도한 책임을 분담하여 클래스가 커지는 것을 방지
 - 유지보수, 재사용성, 테스트 등을 용이하게 한다.
-- 
+
+## ViewModel의 특징
+- Activity가 완전히 종료, Fragment가 완전히 분리될 때까지 메모리에 남아있도록 설계
+- 액티비티가 최초 생성될 때 일반적으로 ViewModel을 인스턴스화 하여 생명주기를 함께 시작
+- Configuration 변경이 발생 시 Activity가 다시 시작되는 것을 확인 가능 -> but, ViewModel은 여전히 메모리 상에 남아있다.
+  - Activity 내부에서 Configuration 변경과 무관하게 유지되는 NonConfigurationInstances 객체를 따로 관리
+- Activity의 finish() 호출등에 의해 Activity의 생명주기가 종료되면 내부 LifecycleEventObserver를 통해 ViewModel도 onCleared() 콜백 호출
+![image](https://user-images.githubusercontent.com/81352078/116787446-00a25680-aadf-11eb-9d89-6f1d4cdcb9d9.png)
