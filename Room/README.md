@@ -26,3 +26,43 @@ val db = Room.databaseBuilder(
 ).build()
 ```
 - Entity
+  - 각 Entity는 하나 이상의 필드를 기본 키로 정의해야 한다.
+  - 만약, ID를 자동으로 할당하려면 @PrimaryKey의 autoGenerate 속성을 설정
+  - 복합 기본키로 @Entity 어노테이션의 primaryKeys 속성 사용
+```
+@Entity(primaryKeys = arrayOf("uid", "number"))
+data class User(
+  val uid : Int?,
+  val number : Int?
+)
+```
+  - 테이블의 이름 설정 -> tableName 속성을 통해 테이블의 이름을 다르게 지정하며, 이때 칼럼의 이름은 @ColumnInfo를 통해 지정
+```
+@Entity(tableName = "student")
+data class Student(
+  @PrimaryKey val Num : Int,
+  @ColumnInfo(name = "st_Name")
+  val Name : String?,
+  @ColumnInfo(name = "st_Addr")
+  val Addr : String?
+)
+```
+  - Entity에 유지하지 않으려는 필드는 @Ignore를 사용
+  - 상위 필드를 상속 시 @Entity 속성의 ignoreColumns 속성 사용
+```
+@Entity
+data class Student(
+  @PrimaryKey val Num : Int,
+  @ColumnInfo(name = "st_Name")
+  val Name : String?,
+  @ColumnInfo(name = "st_Addr")
+  val Addr : String?,
+  @Ignore
+  val age : String?
+)
+```
+   - Room 역시 Index를 통해 성능을 향상시킬 수 있다.
+   - unique 속성을 통해 제약조선 표시 가능
+```
+@Entity(indices = arrayOf(Index(value = ["st_Name","st_Addr"], unique = true)))
+```
