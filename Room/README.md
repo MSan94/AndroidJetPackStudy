@@ -66,3 +66,9 @@ data class Student(
 ```
 @Entity(indices = arrayOf(Index(value = ["st_Name","st_Addr"], unique = true)))
 ```
+
+- Dao ( Data Access Objects)
+  - DAO는 DB에 엑세스 하는 데 사용되는 메서드를 가진다.
+  - 쿼리 사용 메서드 정의
+  - 각 DAO에는 앱 DB에 대한 추상적 엑세스를 제공하는 방법이 있으므로 DAO객체는 room의 주요 구성 요소 형성
+  - DAO는 인터페스스 , 추상 클래스일 수 있으며 추상 클래스의 경우 선택적으로 RoomDatabase를 유일한 매개변수로 사용하는 생성자를 가질 수 있다.
