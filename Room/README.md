@@ -72,3 +72,19 @@ data class Student(
   - 쿼리 사용 메서드 정의
   - 각 DAO에는 앱 DB에 대한 추상적 엑세스를 제공하는 방법이 있으므로 DAO객체는 room의 주요 구성 요소 형성
   - DAO는 인터페스스 , 추상 클래스일 수 있으며 추상 클래스의 경우 선택적으로 RoomDatabase를 유일한 매개변수로 사용하는 생성자를 가질 수 있다.
+  
+  - Insert : @Insert 어노테이션을 사용하며, 단일 트랜잭션의 DB에 모든 매개변수를 삽입하는 구현 생성
+  - onConflict를 통해 충돌 시 해결방법을 정의하며, REPLACE 속성을 통해 충돌 시 새로 들어온 데이터로 교체
+```
+@Dao
+interface MyDao{
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  fun insertStudent(varage students : Student)
+  @Insert
+  fun insertBothStudent(student1 : Student, student2 : Student)
+  @Insert
+  fun insertStudentAndSubject(student : Student , friends : List<Student>)
+}
+```
+  - Delete : 매개변수로 지정된 엔티티 집합을 DB에서 제거, 기본키를 통해 삭제할 엔티티를 찾는다.
+  - 
