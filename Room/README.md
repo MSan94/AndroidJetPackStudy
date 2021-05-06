@@ -12,4 +12,17 @@
     - RoomDatabase를 확장하는 추상 클래스
     - 어노테이션 내 DB와 연결된 엔티티의 목록을 포함
     - 인수가 0개인 추상 메서드를 포함하며, @Dao로 처리된 클래스 반환
- 
+  - 앱이 단일 프로세스에서 실행되는 경우 RoomDatabase 인스턴스의 리소스가 많이 소비되므로 싱글톤 패턴을 통해 인스턴스화 한다.
+```
+@Database(entities = arrayOf(User::class), version = 1)
+abstract class AppDatabase : RoomDatabase(){
+  abstract fun userDao() : UserDao
+}
+```
+```
+val db = Room.databaseBuilder(
+  applicationContext,
+  AppDatabase::class.java, "DB_NAME"
+).build()
+```
+- Entity
