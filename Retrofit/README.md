@@ -177,3 +177,241 @@ class MainActivity : AppCompatActivity() {
 //network security policy -> http 형식이라 발생
 // https 요청 방법 , http 요청방법
 ```
+
+# 2021.05.06 실습
+
+## 롤 로테이션 챔피언 id를 가져와서 이름값 변경
+
+```
+interface LolAPI {
+    @GET("/lol/platform/v3/champion-rotations")
+    fun getMovie(
+        @Query("api_key") key : String
+    ): Call<LolDto>
+}
+```
+
+```
+data class LolDto(
+    @SerializedName("freeChampionIds") val freeChampionIds : List<Int>
+)
+```
+
+```
+class ChampionName {
+    var champ_Name: String = ""
+
+    constructor(id: Int) {
+        champ_Name = when (id) {
+            1 -> "Annie"
+            2 -> "Olaf"
+            3 -> "Galio"
+            4 -> "Twisted Fate"
+            5 -> "Xin Zhao"
+            6 -> "Urgot"
+            7 -> "LeBlanc"
+            8 -> "Vladimir"
+            9 -> "Fiddlesticks"
+            10 -> "Kayle"
+            11 -> "Master Yi"
+            12 -> "Alistar"
+            13 -> "Ryze"
+            14 -> "Sion"
+            15 -> "Sivir"
+            16 -> "Soraka"
+            17 -> "Teemo"
+            18 -> "Tristana"
+            19 -> "Warwick"
+            20 -> "Nunu & Willump"
+            21 -> "Miss Fortune"
+            22 -> "Ashe"
+            23 -> "Tryndamere"
+            24 -> "Jax"
+            25 -> "Morgana"
+            26 -> "Zilean"
+            27 -> "Singed"
+            28 -> "Evelynn"
+            29 -> "Twitch"
+            30 -> "Karthus"
+            31 -> "Cho'Gath"
+            32 -> "Amumu"
+            33 -> "Rammus"
+            34 -> "Anivia"
+            35 -> "Shaco"
+            36 -> "Dr. Mundo"
+            37 -> "Sona"
+            38 -> "Kassadin"
+            39 -> "Irelia"
+            40 -> "Janna"
+            41 -> "Gangplank"
+            42 -> "Corki"
+            43 -> "Karma"
+            44 -> "Taric"
+            45 -> "Veigar"
+            48 -> "Trundle"
+            50 -> "Swain"
+            51 -> "Caitlyn"
+            53 -> "Blitzcrank"
+            54 -> "Malphite"
+            55 -> "Katarina"
+            56 -> "Nocturne"
+            57 -> "Maokai"
+            58 -> "Renekton"
+            59 -> "Jarvan IV"
+            60 -> "Elise"
+            61 -> "Orianna"
+            62 -> "Wukong"
+            63 -> "Brand"
+            64 -> "Lee Sin"
+            67 -> "Vayne"
+            68 -> "Rumble"
+            69 -> "Cassiopeia"
+            72 -> "Skarner"
+            74 -> "Heimerdinger"
+            75 -> "Nasus"
+            76 -> "Nidalee"
+            77 -> "Udyr"
+            78 -> "Poppy"
+            79 -> "Gragas"
+            80 -> "Pantheon"
+            81 -> "Ezreal"
+            82 -> "Mordekaiser"
+            83 -> "Yorick"
+            84 -> "Akali"
+            85 -> "Kennen"
+            86 -> "Garen"
+            89 -> "Leona"
+            90 -> "Malzahar"
+            91 -> "Talon"
+            92 -> "Riven"
+            96 -> "Kog'Maw"
+            98 -> "Shen"
+            99 -> "Lux"
+            101 -> "Xerath"
+            102 -> "Shyvana"
+            103 -> "Ahri"
+            104 -> "Graves"
+            105 -> "Fizz"
+            106 -> "Volibear"
+            107 -> "Rengar"
+            110 -> "Varus"
+            111 -> "Nautilus"
+            112 -> "Viktor"
+            113 -> "Sejuani"
+            114 -> "Fiora"
+            115 -> "Ziggs"
+            117 -> "Lulu"
+            119 -> "Draven"
+            120 -> "Hecarim"
+            121 -> "Kha'Zix"
+            122 -> "Darius"
+            126 -> "Jayce"
+            127 -> "Lissandra"
+            131 -> "Diana"
+            133 -> "Quinn"
+            134 -> "Syndra"
+            136 -> "Aurelion Sol"
+            141 -> "Kayn"
+            142 -> "Zoe"
+            143 -> "Zyra"
+            145 -> "Kai'Sa"
+            150 -> "Gnar"
+            154 -> "Zac"
+            157 -> "Yasuo"
+            161 -> "Vel'Koz"
+            163 -> "Taliyah"
+            164 -> "Camille"
+            201 -> "Braum"
+            202 -> "Jhin"
+            203 -> "Kindred"
+            222 -> "Jinx"
+            223 -> "Tahm Kench"
+            235 -> "Senna"
+            236 -> "Lucian"
+            238 -> "Zed"
+            240 -> "Kled"
+            245 -> "Ekko"
+            246 -> "Qiyana"
+            254 -> "Vi"
+            266 -> "Aatrox"
+            267 -> "Nami"
+            268 -> "Azir"
+            350 -> "Yuumi"
+            412 -> "Thresh"
+            420 -> "Illaoi"
+            421 -> "Rek'Sai"
+            427 -> "Ivern"
+            429 -> "Kalista"
+            432 -> "Bard"
+            497 -> "Rakan"
+            498 -> "Xayah"
+            516 -> "Ornn"
+            517 -> "Sylas"
+            518 -> "Neeko"
+            523 -> "Aphelios"
+            555 -> "Pyke"
+            875 -> "Sett"
+            else -> "noData"
+        }
+    }
+}
+```
+```
+package com.example.retrofit2
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.util.Log
+import com.example.retrofit2.api.LolAPI
+import com.example.retrofit2.model.ChampionName
+import com.example.retrofit2.model.LolDto
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
+class MainActivity : AppCompatActivity() {
+    private lateinit var retrofit : Retrofit
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        var LotationList = mutableListOf<ChampionName>()
+
+        retrofit = Retrofit.Builder()
+            .baseUrl("https://kr.api.riotgames.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val movieAPI = retrofit.create(LolAPI::class.java)
+        movieAPI.getMovie("RGAPI-6f0350dd-375d-40d3-8443-dcada36b27d4")
+            .enqueue(object: Callback<LolDto>{
+                override fun onResponse(call: Call<LolDto>, response: Response<LolDto>) {
+                    if(response.isSuccessful.not()){
+                        Log.d("Test", "장애")
+                        return
+                    }
+                    response.body()?.let {
+                        it.freeChampionIds.forEach {
+                            val championName = ChampionName(it)
+                            LotationList.add(championName)
+                        }
+
+                        for(i in 0 until LotationList.size){
+                            Log.d("Test", "${LotationList[i].champ_Name.toString()}")
+                        }
+                    }
+
+                }
+
+                override fun onFailure(call: Call<LolDto>, t: Throwable) {
+                    Log.d("Test", "실패")
+                    Log.d("Test", "${t.toString()}")
+                    Log.d("Test", "${call.request()}")
+                }
+
+            })
+    }
+}
+```
