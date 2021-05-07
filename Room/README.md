@@ -5,6 +5,25 @@
 - SQLite위에 만든 구글의 ORM
 - 룸을 통해 앱의 단일 정보 소스로 제공되는 캐시를 통해 인터넷 연결 여부와 상관없이 앱의 주요 정보와 일관된 사본을 볼 수 있다.
 
+## 공식문서
+- https://developer.android.com/training/data-storage/room
+
+## 설정
+```
+dependencies {
+  def room_version = "2.2.6"
+
+  implementation "androidx.room:room-runtime:$room_version"
+  kapt "androidx.room:room-compiler:$room_version"
+
+  // optional - Kotlin Extensions and Coroutines support for Room
+  implementation "androidx.room:room-ktx:$room_version"
+
+  // optional - Test helpers
+  testImplementation "androidx.room:room-testing:$room_version"
+}
+```
+
 ## 구성요소
 - DB
   - DB홀더를 포함하며 앱의 지속적인 관계형 데이터에 대한 기본 연결을 위한 Access Point 역할 수행
